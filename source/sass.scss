@@ -1,0 +1,69 @@
+/**
+*
+*
+*
+* 
+*
+**/
+
+/* cell size replaced by dynamic size, that CSS is generated inside the JS code */
+$cell-size: 0.25em;
+
+$body-margin: 0.5em;
+$cell-live-color: white;
+$cell-dead-color: #222;
+
+
+
+
+
+.life-cell {
+	display: inline-block;
+	padding: 0;
+	margin: 0;
+	vertical-align: top;
+	/* width is calculated as a percentage by the JS code */
+	height: 100%;
+}
+
+body {
+	margin: $body-margin;
+} 
+
+.life-cell {
+	user-select: none;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+
+.cell-alive {
+	background-color: $cell-live-color;
+}
+
+.cell-dead {
+	background-color: $cell-dead-color;
+}
+
+.life-cell-row {
+	margin: 0;
+	padding: 0;
+	display: block;
+}
+
+#cell-field {
+	$cell-matrix-size: 40em;
+	$cell-matrix-border-width: 5px;
+	width: $cell-matrix-size;
+	height: $cell-matrix-size;
+	/* fix the max width/height to avoid scroll bar appearing */
+	max-width: calc(100% - ( 2 * ( #{$cell-matrix-border-width} )));
+	max-height: calc(100vw - ( 2 * ( #{$cell-matrix-border-width} + #{$body-margin} ))); 
+	text-align: center;
+	display: inline-block;
+	border: $cell-matrix-border-width solid black;
+	background-color: $cell-dead-color;
+	
+}
+
+
