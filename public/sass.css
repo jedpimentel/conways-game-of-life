@@ -15,7 +15,21 @@
   height: 100%; }
 
 body {
-  margin: 0.5em; }
+  margin: 0.5em;
+  background-color: red;
+  text-align: center; }
+  @media (min-aspect-ratio: 1 / 1) {
+    body {
+      background-color: blue; } }
+
+#main {
+  display: inline-block;
+  border: 1px dotted yellow; }
+
+.button-group {
+  border: 1px solid green; }
+  .button-group button {
+    width: 25%; }
 
 .life-cell {
   user-select: none;
@@ -37,12 +51,18 @@ body {
 #cell-field {
   width: 40em;
   height: 40em;
-  /* fix the max width/height to avoid scroll bar appearing */
-  max-width: calc(100% - ( 2 * ( 5px )));
-  max-height: calc(100vw - ( 2 * ( 5px + 0.5em )));
   text-align: center;
   display: inline-block;
   border: 5px solid black;
-  background-color: #222; }
+  background-color: #222;
+  /* fix the max width/height to avoid scroll bar appearing */
+  /* max-width: calc(100% - ( 2 * ( 5px ))); */
+  /* get a better `other-stuff` value */
+  max-width: calc(100vw - ( 2 * ( 5px + 0.5em )));
+  max-height: calc(100vw - ( 2 * ( 5px + 0.5em ))); }
+  @media (min-aspect-ratio: 10 / 11) {
+    #cell-field {
+      max-height: calc(100vh - ( 2 * ( 5px + 0.5em)) - 3em);
+      max-width: calc(100vh - ( 2 * ( 5px + 0.5em)) - 3em); } }
 
 /*# sourceMappingURL=sass.css.map */

@@ -16,8 +16,8 @@ var LifeCell = React.createClass({
 var LifeField = React.createClass({
 	// for ease of rendering, the cell matrix is arr[column][row] (vertical, then horizontal)
 	getInitialState: function() {
-		var matrixHeight = 100;
-		var matrixWidth = 100;
+		var matrixHeight = 50;
+		var matrixWidth = 50;
 		
 		
 		return ({
@@ -54,13 +54,15 @@ var LifeField = React.createClass({
 		}
 		return newCellMatrix;
 	},
-	setNewDimensions: function(x, y) {
+	setNewDimensions: function(x, y, isRelative) {
 		return function() {
 			//console.log(x, 'and', y);
+			var newWidth = isRelative ? Math.max(this.state.matrixWidth + x, 10) : x;
+			var newHeight = isRelative ? Math.max(this.state.matrixHeight + y, 10) : y;
 			this.setState({
-				matrixWidth: x,
-				matrixHeight: y,
-				cellMatrix: this.blankCellMatrix(x, y, true),
+				matrixWidth: newWidth, 
+				matrixHeight: newHeight,
+				cellMatrix: this.blankCellMatrix(newWidth, newHeight, true),
 			});
 		}.bind(this);
 	},
@@ -174,30 +176,30 @@ var LifeField = React.createClass({
 		});
 		//console.log('calc if alive state', newMatrixState);
 		var b = (new Date()).getTime();
-		console.log('set in', b - a)
+		//console.log('set in', b - a)
 		this.setState({
 			cellMatrix: newMatrixState,
 			generations: this.state.generations + 1,
 		});
 	},
-	step: function() {
-		var startTime = (new Date()).getTime();
+	step: function() { 
+		//var startTime = (new Date()).getTime();
 		//console.log('step');
 		var matrixWithUpdatedNeighbors = this.calcNeighbors();
-		var midTime = (new Date()).getTime();
+		//var midTime = (new Date()).getTime();
 		//console.log('neighbors', this.state.cellMatrix);
 		this.calcIfAlive(matrixWithUpdatedNeighbors);
 		//console.log('alive', this.state.cellMatrix);
-		var endTime = (new Date()).getTime();
-		console.log(endTime - startTime, 'ms (',midTime - startTime,'+', endTime - midTime);
+		//var endTime = (new Date()).getTime();
+		//console.log(endTime - startTime, 'ms (',midTime - startTime,'+', endTime - midTime);
 	},
 	startAutoStep: function() {
-		console.log("setting interval at", this.state.stepTime, "ms")
+		//console.log("setting interval at", this.state.stepTime, "ms")
 		this.autoStep = setInterval( this.step, this.state.stepTime);
 	},
 	stopAutoStep: function() {
 		// this sould also be called in componentWillUnmount in case component is meant to be unmounted
-		console.log('before', this.autoStep)
+		//console.log('before', this.autoStep)
 		clearInterval(this.autoStep);
 		delete this.autoStep;
 		this.setState({});
@@ -244,30 +246,30 @@ var LifeField = React.createClass({
 		if (this.autoStep === undefined) {
 			startButton = <button onClick={this.startAutoStep} >start</button>
 		} else {
-			console.log('autostep', this.autoStep)
+			//console.log('autostep', this.autoStep)
 			startButton = <button onClick={this.stopAutoStep} >pause</button>
 			
 		}
 		
+		console.log('frame time:', ((new Date).getTime() - this.lastStepTime) || 0 );
+		this.lastStepTime = (new Date).getTime()
+		
 		return (
 			<div>
 				<style>
-					{'body { background-color: red }'}
 					{'.life-cell{ width: ' + (100 / columns) + '%;}'} 
 					{'.life-cell-row { height: ' + (100 / rows) + '%;}'} 
 				</style> 
-				<div>{"Generations: " + this.state.generations}</div>
+				<div>{columns + ' by ' + rows + ' matrix. Generations: ' + this.state.generations}</div>
 				<div id='cell-field'>
 					{lifeCells}
 				</div><br/>
-				<button onClick={this.randomize}>randomize</button> 
-				{startButton}
-				<button onClick={this.step}>step</button>
-				<button onClick={this.setNewDimensions(20,20)} >small</button>
-				<button onClick={this.setNewDimensions(30,30)} >medium</button>
-				<button onClick={this.setNewDimensions(40,40)} >large</button>
-				<button onClick={this.startAutoStep} >start</button>
-				<button onClick={this.stopAutoStep} >stop</button>
+				<div className='button-group'>
+					<button onClick={this.randomize}>random</button> 
+					{startButton}
+					<button onClick={this.setNewDimensions(-10,-10, true)} >smaller</button>
+					<button onClick={this.setNewDimensions(+10,+10, true)} >bigger</button>
+				</div>
 			</div>
 		)
 	}

@@ -20,8 +20,8 @@ var LifeField = React.createClass({
 
 	// for ease of rendering, the cell matrix is arr[column][row] (vertical, then horizontal)
 	getInitialState: function getInitialState() {
-		var matrixHeight = 100;
-		var matrixWidth = 100;
+		var matrixHeight = 50;
+		var matrixWidth = 50;
 
 		return {
 			matrixWidth: matrixWidth,
@@ -56,13 +56,15 @@ var LifeField = React.createClass({
 		}
 		return newCellMatrix;
 	},
-	setNewDimensions: function setNewDimensions(x, y) {
+	setNewDimensions: function setNewDimensions(x, y, isRelative) {
 		return function () {
 			//console.log(x, 'and', y);
+			var newWidth = isRelative ? Math.max(this.state.matrixWidth + x, 10) : x;
+			var newHeight = isRelative ? Math.max(this.state.matrixHeight + y, 10) : y;
 			this.setState({
-				matrixWidth: x,
-				matrixHeight: y,
-				cellMatrix: this.blankCellMatrix(x, y, true)
+				matrixWidth: newWidth,
+				matrixHeight: newHeight,
+				cellMatrix: this.blankCellMatrix(newWidth, newHeight, true)
 			});
 		}.bind(this);
 	},
@@ -173,30 +175,30 @@ var LifeField = React.createClass({
 		});
 		//console.log('calc if alive state', newMatrixState);
 		var b = new Date().getTime();
-		console.log('set in', b - a);
+		//console.log('set in', b - a)
 		this.setState({
 			cellMatrix: newMatrixState,
 			generations: this.state.generations + 1
 		});
 	},
 	step: function step() {
-		var startTime = new Date().getTime();
+		//var startTime = (new Date()).getTime();
 		//console.log('step');
 		var matrixWithUpdatedNeighbors = this.calcNeighbors();
-		var midTime = new Date().getTime();
+		//var midTime = (new Date()).getTime();
 		//console.log('neighbors', this.state.cellMatrix);
 		this.calcIfAlive(matrixWithUpdatedNeighbors);
 		//console.log('alive', this.state.cellMatrix);
-		var endTime = new Date().getTime();
-		console.log(endTime - startTime, 'ms (', midTime - startTime, '+', endTime - midTime);
+		//var endTime = (new Date()).getTime();
+		//console.log(endTime - startTime, 'ms (',midTime - startTime,'+', endTime - midTime);
 	},
 	startAutoStep: function startAutoStep() {
-		console.log("setting interval at", this.state.stepTime, "ms");
+		//console.log("setting interval at", this.state.stepTime, "ms")
 		this.autoStep = setInterval(this.step, this.state.stepTime);
 	},
 	stopAutoStep: function stopAutoStep() {
 		// this sould also be called in componentWillUnmount in case component is meant to be unmounted
-		console.log('before', this.autoStep);
+		//console.log('before', this.autoStep)
 		clearInterval(this.autoStep);
 		delete this.autoStep;
 		this.setState({});
@@ -253,7 +255,7 @@ var LifeField = React.createClass({
 				'start'
 			);
 		} else {
-			console.log('autostep', this.autoStep);
+			//console.log('autostep', this.autoStep)
 			startButton = React.createElement(
 				'button',
 				{ onClick: this.stopAutoStep },
@@ -261,20 +263,22 @@ var LifeField = React.createClass({
 			);
 		}
 
+		console.log('frame time:', new Date().getTime() - this.lastStepTime || 0);
+		this.lastStepTime = new Date().getTime();
+
 		return React.createElement(
 			'div',
 			null,
 			React.createElement(
 				'style',
 				null,
-				'body { background-color: red }',
 				'.life-cell{ width: ' + 100 / columns + '%;}',
 				'.life-cell-row { height: ' + 100 / rows + '%;}'
 			),
 			React.createElement(
 				'div',
 				null,
-				"Generations: " + this.state.generations
+				columns + ' by ' + rows + ' matrix. Generations: ' + this.state.generations
 			),
 			React.createElement(
 				'div',
@@ -283,40 +287,24 @@ var LifeField = React.createClass({
 			),
 			React.createElement('br', null),
 			React.createElement(
-				'button',
-				{ onClick: this.randomize },
-				'randomize'
-			),
-			startButton,
-			React.createElement(
-				'button',
-				{ onClick: this.step },
-				'step'
-			),
-			React.createElement(
-				'button',
-				{ onClick: this.setNewDimensions(20, 20) },
-				'small'
-			),
-			React.createElement(
-				'button',
-				{ onClick: this.setNewDimensions(30, 30) },
-				'medium'
-			),
-			React.createElement(
-				'button',
-				{ onClick: this.setNewDimensions(40, 40) },
-				'large'
-			),
-			React.createElement(
-				'button',
-				{ onClick: this.startAutoStep },
-				'start'
-			),
-			React.createElement(
-				'button',
-				{ onClick: this.stopAutoStep },
-				'stop'
+				'div',
+				{ className: 'button-group' },
+				React.createElement(
+					'button',
+					{ onClick: this.randomize },
+					'random'
+				),
+				startButton,
+				React.createElement(
+					'button',
+					{ onClick: this.setNewDimensions(-10, -10, true) },
+					'smaller'
+				),
+				React.createElement(
+					'button',
+					{ onClick: this.setNewDimensions(+10, +10, true) },
+					'bigger'
+				)
 			)
 		);
 	}

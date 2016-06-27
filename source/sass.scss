@@ -28,7 +28,26 @@ $cell-dead-color: #222;
 
 body {
 	margin: $body-margin;
+	background-color: red;
+	@media (min-aspect-ratio: 1/1) { 
+		background-color: blue;
+	}
+	text-align: center;
 } 
+
+#main {
+	display: inline-block;
+	border:1px dotted yellow;
+}
+
+
+.button-group {
+	border: 1px solid green;
+	button {
+		width: 25%;
+	}
+}
+
 
 .life-cell {
 	user-select: none;
@@ -56,14 +75,25 @@ body {
 	$cell-matrix-border-width: 5px;
 	width: $cell-matrix-size;
 	height: $cell-matrix-size;
-	/* fix the max width/height to avoid scroll bar appearing */
-	max-width: calc(100% - ( 2 * ( #{$cell-matrix-border-width} )));
-	max-height: calc(100vw - ( 2 * ( #{$cell-matrix-border-width} + #{$body-margin} ))); 
 	text-align: center;
 	display: inline-block;
 	border: $cell-matrix-border-width solid black;
 	background-color: $cell-dead-color;
 	
+	/* fix the max width/height to avoid scroll bar appearing */
+	/* max-width: calc(100% - ( 2 * ( #{$cell-matrix-border-width} ))); */
+	/* get a better `other-stuff` value */
+	$other-stuff: 3em;
+	max-width: calc(100vw - ( 2 * ( #{$cell-matrix-border-width} + #{$body-margin} )));  
+	max-height: calc(100vw - ( 2 * ( #{$cell-matrix-border-width} + #{$body-margin} ))); 
+	@media (min-aspect-ratio: 10/11) { 
+		max-height: calc(100vh - ( 2 * ( #{$cell-matrix-border-width} + #{$body-margin})) - #{$other-stuff}); 
+		max-width: calc(100vh - ( 2 * ( #{$cell-matrix-border-width} + #{$body-margin})) - #{$other-stuff}); 
+	
+	}
+	
 }
 
+
+	
 
