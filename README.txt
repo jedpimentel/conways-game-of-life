@@ -14,15 +14,11 @@ User Story: When I press start, the game will play out.
 
 User Story: Each time the board changes, I can see how many generations have gone by.
 
-TODO: 
-	make it b
-
 
 good to haves:
 	ability to click nd drag over different squares and haven them all activated instead of clicking one at a time
 	newly born cells have a lighter/different color on their first turn of life.
 	use SVG instead of divs for cells
-	
 
 
 note to self: 

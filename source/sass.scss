@@ -9,11 +9,25 @@
 /* cell size replaced by dynamic size, that CSS is generated inside the JS code */
 $cell-size: 0.25em;
 
-$body-margin: 0.5em;
 $cell-live-color: white;
 $cell-dead-color: #222;
+$body-margin: 0.5em;
 
+$cell-matrix-size: 40em;
+$cell-matrix-border-width: 5px;
+$button-group-height: 1.2em;
 
+#title-text {
+	/*background-color: yellow;*/
+	
+	font-size: 1em;
+	@media (min-aspect-ratio: 10/11) {
+		@media (max-height: 40em + 10em) {
+			display: none;
+		}
+	}
+	font-size: 1.8em;
+}
 
 
 
@@ -28,23 +42,23 @@ $cell-dead-color: #222;
 
 body {
 	margin: $body-margin;
-	background-color: red;
+	background-color: #F44;
 	@media (min-aspect-ratio: 1/1) { 
-		background-color: blue;
+		/* background-color: blue; */
 	}
 	text-align: center;
 } 
 
 #main {
 	display: inline-block;
-	border:1px dotted yellow;
 }
 
 
 .button-group {
-	border: 1px solid green;
+	height: $button-group-height;
 	button {
-		width: 25%;
+		text-align: center;
+		width: ( 100% / 5 );
 	}
 }
 
@@ -71,8 +85,6 @@ body {
 }
 
 #cell-field {
-	$cell-matrix-size: 40em;
-	$cell-matrix-border-width: 5px;
 	width: $cell-matrix-size;
 	height: $cell-matrix-size;
 	text-align: center;
